@@ -19,7 +19,7 @@ const routes = [
       name: 'Concert',
       component: () => import("../views/main/Concert.vue"),
       meta: {
-        requireAuth: true
+        requireAuth: true // �����Ҫ��¼
       },
       children: [
         {
@@ -49,7 +49,7 @@ const routes = [
       name: 'Information',
       component: () => import("../views/main/Information.vue"),
       meta: {
-        requireAuth: true
+        requireAuth: true // �����Ҫ��¼
       }
     },
     {
@@ -57,7 +57,7 @@ const routes = [
       name: 'Ticket',
       component: () => import("../views/main/Product/ticket.vue"),
       meta: {
-        requireAuth: true
+        requireAuth: true // �����Ҫ��¼
       }
     }],
   },
@@ -96,7 +96,7 @@ const routes = [
         name: 'AdminManager',
         component: () => import("../views/main/admin/manage/AdminManage.vue"),
         // meta: {
-        //   requireP: true
+        //   requireP: true // �����Ҫ����
         // }
       },
       {
@@ -104,7 +104,7 @@ const routes = [
         name: 'Show',
         component: () => import("../views/main/admin/show/AdminShow.vue"),
         meta: {
-          requireP: true
+          requireP: true // �����Ҫ����
         }
       },
     ]

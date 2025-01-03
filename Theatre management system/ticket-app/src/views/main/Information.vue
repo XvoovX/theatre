@@ -24,12 +24,12 @@
         </el-form-item>
       </el-form>
       <div class="button-group">
-        <el-button @click="dialogVisible = false" class="cancel-btn">取消</el-button>
         <el-button type="primary" @click="editorSubmit" class="submit-btn">确定</el-button>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import { ref, onBeforeUnmount } from 'vue';
@@ -120,101 +120,95 @@ export default {
 </script>
 
 <style scoped>
-/* Overall container layout */
+/* 整体容器布局 */
 .container {
-  width: 70%; /* Adjust container width for better alignment */
+  width: 70%; /* 调整容器宽度，使其对齐更好 */
   margin: 40px auto;
-  padding: 40px; /* Increase padding for a larger container */
+  padding: 40px; /* 增加内边距，容器更大 */
   background-color: #fff;
-  border-radius: 12px; /* Slightly round corners */
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Stronger shadow for depth */
+  border-radius: 12px; /* 略微圆角 */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* 增强阴影效果，增加深度 */
 }
 
-/* Title style */
+/* 标题样式 */
 .title {
   text-align: center;
-  font-size: 36px; /* Adjusted for better visibility */
+  font-size: 36px; /* 调整字体大小，增强可见性 */
   color: #333;
   margin-bottom: 40px;
-  font-family: "华文彩云", sans-serif; /* Set font to 华文彩云 */
+  font-family: "华文彩云", sans-serif; /* 设置字体为华文彩云 */
 }
 
-/* Form section styling */
+/* 表单部分样式 */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 25px; /* Increased gap between form items for better spacing */
+  gap: 25px; /* 增加表单项之间的间隙 */
 }
 
-/* Form item label styling */
+/* 表单项标签样式 */
 .el-form-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px; /* Add some spacing between each form item */
+  margin-bottom: 20px; /* 增加每个表单项之间的间距 */
 }
 
-/* Extended input field style */
+/* 输入框样式 */
 .input-field {
-  width: 100%; /* Make the input field extend the full width of the container */
+  width: 100%; /* 输入框扩展至容器的全部宽度 */
   padding: 14px;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 16px;
-  box-sizing: border-box;
+  box-sizing: border-box; /* 确保内边距和宽度一致 */
 }
 
-/* Input focus effect */
+/* 输入框聚焦时的样式 */
 .input-field:focus {
   border-color: #409EFF;
-  box-shadow: 0 0 5px rgba(64, 158, 255, 0.5);
+  box-shadow: 0 0 5px rgba(64, 158, 255, 0.5); /* 增加聚焦时的边框和阴影效果 */
 }
 
-/* Button style */
+/* 按钮样式 */
 .el-button {
   height: 50px;
   font-size: 16px;
-  width: 160px; /* Increased button width */
+  width: 160px; /* 增加按钮宽度 */
   border-radius: 8px;
-  padding: 0 25px; /* More padding for a better look */
+  padding: 0 25px; /* 增加内边距，使按钮更美观 */
 }
 
-/* Button group layout */
+/* 按钮组的布局 */
 .button-group {
   display: flex;
-  justify-content: space-between;
-  margin-top: 30px; /* Increased space between form and buttons */
+  justify-content: center; /* 按钮居中对齐 */
 }
 
-/* Cancel button style */
-.cancel-btn {
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  color: #333;
-}
-
-/* Submit button style */
+/* 提交按钮样式 */
 .submit-btn {
   background-color: #409EFF;
   border-color: #409EFF;
   color: white;
+  width: 160px; /* 保持固定宽度，确保按钮一致性 */
+  font-size: 18px; /* 略微增大按钮文字 */
 }
 
-/* Responsive design for smaller screens */
+/* 小屏幕的响应式设计 */
 @media (max-width: 768px) {
   .container {
-    width: 90%;
+    width: 90%; /* 在小屏幕下，容器宽度扩大到 90% */
   }
   .input-field {
-    width: 100%;
+    width: 100%; /* 输入框宽度自适应 */
   }
   .button-group {
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* 垂直排列按钮并居中 */
   }
-  .cancel-btn, .submit-btn {
-    width: 100%;
-    margin: 10px 0;
+  .submit-btn {
+    width: 100%; /* 小屏幕下按钮占满全宽 */
+    margin: 10px 0; /* 增加按钮之间的间距 */
   }
 }
 </style>
