@@ -19,7 +19,7 @@
         </el-form>
       </el-card>
     </div>
-  </template>
+</template>
   
   <script>
   import api from "@/api";
@@ -84,13 +84,17 @@
       },
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .login {
-    width: 550px;
-    margin: 100px auto;
-    font-family: '华文彩云', sans-serif; /* 设置字体为华文彩云 */
+  width: 400px;
+  margin: 0 auto; /* 取消上方和下方的空白 */
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  height: 100vh; /* 设置高度为视口高度 */
+  font-family: '华文彩云', sans-serif; /* 使用华文彩云字体 */
   }
   
   .box-card {
@@ -134,5 +138,5 @@
     background-color: #66b1ff;
     border-color: #66b1ff;
   }
-  </style>
+</style>
   

@@ -201,7 +201,11 @@ export default {
 <style scoped lang="less">
 .login {
   width: 400px;
-  margin: 30px auto; /* 减少了上方间距 */
+  margin: 0 auto; /* 取消上方和下方的空白 */
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  height: 100vh; /* 设置高度为视口高度 */
   font-family: '华文彩云', sans-serif; /* 使用华文彩云字体 */
 }
 
