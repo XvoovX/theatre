@@ -11,211 +11,151 @@
                 </p>
             </div>
             <div class="sales-board-form">
-                <div class="sales-board-line-left">购买数量：</div>
-                <div class="sales-board-line-right">
-                    <Counter></Counter>
+                <div class="sales-board-line">
+                    <div class="sales-board-line-left">购买数量：</div>
+                    <div class="sales-board-line-right">
+                        <input v-model="postData.Quantity" class="input-field narrow-input" />
+                    </div>
                 </div>
-            </div>
-            <div class="sales-board-form">
-                <div class="sales-board-line-left">票档：</div>
-                <div class="sales-board-line-right">
-                    <Type :selecterData="selecterData"></Type>
+                <div class="sales-board-line">
+                    <div class="sales-board-line-left">票档：</div>
+                    <div class="sales-board-line-right">
+                        <Type :selecterData="selecterData" />
+                    </div>
                 </div>
-            </div>
-            <div class="sales-board-form">
-                <div class="sales-board-line-left">场次</div>
-                <div class="sales-board-line-right">
-                    <Timer :timerData="timerData"></Timer>
-
+                <div class="sales-board-line">
+                    <div class="sales-board-line-left">场次</div>
+                    <div class="sales-board-line-right">
+                        <Timer :timerData="timerData" />
+                    </div>
                 </div>
+                <el-button @click="handleConfirmTicket" class="buy-btn">购票</el-button>
+                <TicketDialog :visible="ticketDialogVisible" :timerData="timerData" :selecterData="selecterData" :username="username" @confirm="handleConfirmTicket" @close="handleCloseTicket" />
+                <ConfirmTicketDialog v-if="showConfirmDialog" :paymentInfo="paymentInfo" :qrCode="qrCode" :orderID="orderID" @paymentComplete="handlePaymentComplete" @cancel="handleCancel" />
             </div>
-            <el-button @click="showTicketDialog">购票</el-button>
-            <TicketDialog :visible="ticketDialogVisible" :timerData="timerData" :selecterData="selecterData"
-                :username="username" @confirm="handleConfirmTicket" @close="handleCloseTicket">
-            </TicketDialog>
-            <ConfirmTicketDialog v-if="showConfirmDialog" :paymentInfo="paymentInfo" :qrCode="qrCode" :orderID="orderID"
-                @paymentComplete="handlePaymentComplete" @cancel="handleCancel" />
-        </div>
-
-        <div class="sales-board-des">
-            <h3>购票须知</h3>
-            <ul>
-                <li>每笔订单最多购买4张、每个账号最多购买4张。</li>
-                <li>支持多种票品验票后入场，如证件电子票。</li>
-                <li>本项目支持有条件退款，若需要收取退票手续费，将以用户实际支付票款为基准收取。</li>
-                <li>儿童一律凭票入场</li>
-            </ul>
-            <h3>观演须知</h3>
-            <ul>
-                <li>演出时长约90分钟</li>
-                <li>请于演出前约120分钟入场</li>
-                <li>请携带有效证件入场</li>
-                <li>请勿携带食品、酒水等物品入场</li>
-            </ul>
+            <div class="divider"></div>
+            <div class="sales-board-des">
+                <h3>购票须知</h3>
+                <ul>
+                    <li>每笔订单最多购买4张、每个账号最多购买4张。</li>
+                    <li>支持多种票品验票后入场，如证件电子票。</li>
+                    <li>本项目支持有条件退款，若需要收取退票手续费，将以用户实际支付票款为基准收取。</li>
+                    <li>儿童一律凭票入场</li>
+                </ul>
+                <h3>观演须知</h3>
+                <ul>
+                    <li>演出时长约90分钟</li>
+                    <li>请于演出前约120分钟入场</li>
+                    <li>请携带有效证件入场</li>
+                    <li>请勿携带食品、酒水等物品入场</li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import Counter from '@/components/HomePage/counter.vue'
-import Type from '@/components/HomePage/type.vue'
-import Timer from '@/components/HomePage/timer.vue'
-import TicketDialog from './TicketDialog.vue'
-import axios from 'axios';
-import ConfirmTicketDialog from './ConfirmTicketDialog.vue';
-
-export default {
+  import Counter from '@/components/HomePage/counter.vue'
+  import Type from '@/components/HomePage/type.vue'
+  import Timer from '@/components/HomePage/timer.vue'
+  import TicketDialog from './TicketDialog.vue'
+  import axios from 'axios';
+  import ConfirmTicketDialog from './ConfirmTicketDialog.vue';
+  
+  export default {
     name: 'Open',
     data() {
-        return {
-            selecterData: [
-                {
-                    value: "内场前排",
-                    id: 1
-                },
-                {
-                    value: "内场后排",
-                    id: 2
-                },
-                {
-                    value: "看台前排",
-                    id: 3
-                },
-                {
-                    value: "看台后排",
-                    id: 4
-                },
-                {
-                    value: "山顶位置",
-                    id: 5
-                }
-            ],
-            timerData: [
-                {
-                    value: '2023-06-07',
-                    id: 1
-                },
-                {
-                    value: '2023-07-01',
-                    id: 2
-                },
-                {
-                    value: '2023-07-02',
-                    id: 3
-                },
-            ],
-            ticketDialogVisible: false,
-            username: this.$store.state.login.user.data.username,
-            selectedTimer: null,
-            selectedQuantity: 1,
-            selectedType: null,
-            postData: {
-                UserID: this.$store.state.login.user.data.UserID,
-                TicketID: String(32434),
-                // timerData: ticketInfo.timerData,
-                PurchaseTime: new Date().toLocaleString(),
-                OrderStatus: "已支付",
-                Quantity: String(1),
-            },
-            showConfirmDialog: false,
-            paymentInfo: '', // 从后端获取的支付信息
-            qrCode: '',
-            orderID: ''// 从后端获取的二维码链接
-        }
+      return {
+        selecterData: [
+          { value: "内场前排", id: 1 },
+          { value: "内场后排", id: 2 },
+          { value: "看台前排", id: 3 },
+          { value: "看台后排", id: 4 },
+          { value: "山顶位置", id: 5 }
+        ],
+        timerData: [
+          { value: '2021-06-01', id: 1 },
+          { value: '2021-07-01', id: 2 },
+          { value: '2021-08-01', id: 3 },
+        ],
+        ticketDialogVisible: false,
+        username: this.$store.state.login.user.data.username,
+        selectedTimer: null,
+        selectedQuantity: 1,
+        selectedType: null,
+        postData: {
+          UserID: JSON.parse(localStorage.getItem('ticket')).data.userID,
+          TicketID: String(32434),
+          PurchaseTime: new Date().toLocaleString(),
+          OrderStatus: "已支付",
+          Quantity: 1,
+        },
+        showConfirmDialog: false,
+        paymentInfo: '',
+        qrCode: '',
+        orderID: ''
+      };
     },
     components: {
-        Counter,
-        Type,
-        Timer,
-        TicketDialog,
-        ConfirmTicketDialog,
+      Counter,
+      Type,
+      Timer,
+      TicketDialog,
+      ConfirmTicketDialog,
     },
     methods: {
-        showTicketDialog() {
-            // 设置购票信息
-            this.username = this.$store.state.login.user.data.username
-            console.log(this.username)// 设置默认值
-            this.selectedTimer = null; // 设置默认值
-            this.selectedQuantity = 1; // 设置默认值
-            this.selectedType = null; // 设置默认值
-
-            // 弹出购票对话框
-            this.ticketDialogVisible = true;
-        },
-
-        handleConfirmTicket(ticketInfo) {
-            // 处理确认购票逻辑，你可以在这里调用后端接口提交购票信息
-            console.log("确认购票", ticketInfo);
-            // 获取当前时间
-            const currentDate = new Date();
-
-            // 提取年、月、日
-            const year = currentDate.getFullYear();
-            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // 月份是从0开始的，因此要加1
-            const day = currentDate.getDate().toString().padStart(2, '0');
-
-            // 构建年月日字符串
-            const formattedDate = `${year}-${month}-${day}`;
-
-            console.log(formattedDate);
-
-            // 创建一个空的 URLSearchParams 对象
-            const formData = new URLSearchParams();
-
-            // 添加键值对到对象中
-            formData.append('UserID', this.postData.UserID);
-            formData.append('TicketID', this.postData.TicketID);
-            formData.append('PurchaseTime', this.postData.PurchaseTime);
-            formData.append('OrderStatus', '未支付');
-            formData.append('Quantity', this.postData.Quantity);
-            // ... 添加其他键值对
-
-            // 使用 fetch 发送 POST 请求
-            fetch('http://127.0.0.1:5000/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: formData,
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('请求成功', data);
-                    this.showConfirmDialog = true;
-                    this.paymentInfo = data.data.OrderStatus;
-                    this.qrCode = "https://img2.baidu.com/it/u=1443929167,3597244248&fm=253&fmt=auto&app=138&f=GIF?w=150&h=150";
-                    this.orderID = data.data.OrderID;
-                })
-                .catch(error => {
-                    console.error('请求失败', error);
-                });
-
-            this.ticketDialogVisible = false;
-
-
-        },
-
-        handleCloseTicket() {
-            // 处理取消购票逻辑
-            console.log("取消购票");
-
-            // 关闭购票对话框
-            this.ticketDialogVisible = false;
-        },
-
-
-
-        handlePaymentComplete() {
-            // 支付完成后的处理，可以关闭对话框或执行其他操作
-            this.showConfirmDialog = false;
-            // 在这里可以进行支付完成后的其他逻辑处理
-        },
-        handleCancel() {
-            // 取消按钮的处理，可以关闭对话框或执行其他操作
-            this.showConfirmDialog = false;
-        },
+      showTicketDialog() {
+        this.username = this.$store.state.login.user.data.username;
+        this.selectedTimer = null;
+        this.selectedQuantity = 1;
+        this.selectedType = null;
+        this.ticketDialogVisible = true;
+      },
+      handleConfirmTicket(ticketInfo) {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+        const day = currentDate.getDate().toString().padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+  
+        const formData = new URLSearchParams();
+        formData.append('UserID', this.postData.UserID);
+        formData.append('TicketID', this.postData.TicketID);
+        formData.append('PurchaseTime', this.postData.PurchaseTime);
+        formData.append('OrderStatus', '未支付');
+        formData.append('Quantity', this.postData.Quantity);
+  
+        fetch('http://127.0.0.1:5000/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: formData,
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.showConfirmDialog = true;
+            this.paymentInfo = data.data.OrderStatus;
+            this.qrCode = "https://img2.baidu.com/it/u=1443929167,3597244248&fm=253&fmt=auto&app=138&f=GIF?w=150&h=150";
+            this.orderID = data.data.OrderID;
+          })
+          .catch(error => {
+            console.error('请求失败', error);
+          });
+  
+        this.ticketDialogVisible = false;
+      },
+      handleCloseTicket() {
+        this.ticketDialogVisible = false;
+      },
+      handlePaymentComplete() {
+        this.showConfirmDialog = false;
+      },
+      handleCancel() {
+        this.showConfirmDialog = false;
+      },
     }
-}
+  };
 </script>
 
 <style scoped>
@@ -252,31 +192,40 @@ export default {
 .sales-board-form {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     margin-bottom: 20px;
 }
 
 .sales-board-line {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.sales-board-line .label {
+.sales-board-line-left {
     font-size: 16px;
     font-weight: bold;
     color: #333;
+    width: 100px;
 }
 
-.sales-board-line .value {
-    font-size: 16px;
-    color: #666;
+.sales-board-line-right {
+    display: flex;
+    justify-content: flex-start;
+    flex: 1;
 }
 
-.counter-box .el-input__inner {
-    text-align: center;
-    font-size: 18px;
+.input-field {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.narrow-input {
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 .buy-btn {
@@ -285,9 +234,15 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px auto;
-    min-width: 130px;
-    height: 40px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.divider {
+    height: 0;
+    border-top: 1px dashed #ccc;
+    width: 100%;
+    margin: 70px auto 0px;
 }
 
 .sales-board-des h3 {
@@ -312,6 +267,6 @@ export default {
 .sales-board-des li:before {
     content: '•';
     margin-right: 10px;
-    color: #4fc08d; 
+    color: #4fc08d;
 }
 </style>
