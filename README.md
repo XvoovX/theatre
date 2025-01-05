@@ -1,16 +1,3 @@
-# Front end
-
-
-
-
-
-
-
-
-
-
-
-
 # ticket-app
 
 ## Project setup
@@ -42,11 +29,13 @@ npm install --save axios
 ```
 
 
+
 ### 配置快捷运行方案
 ```js
 npm install -g concurrently
 npm install -g nodemon
 ```
+
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
